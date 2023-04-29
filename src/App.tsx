@@ -1,33 +1,15 @@
-import {PropsWithChildren, Reducer, useReducer} from 'react'
+import {PropsWithChildren, useReducer} from 'react'
 import './App.css'
-
-type Action =
-    | { type: 'increment counter' }
-
-type AppState = {
-    count: number
-}
-const defaultState: AppState = {count: 0};
+import {AppReducer, appReducer, AppState, defaultState} from "./AppReducer.ts";
 
 type AppProps = PropsWithChildren<{
     initialState?: AppState,
     reducer?: AppReducer
 }>
 
-type AppReducer = Reducer<AppState, Action>
-
-function defaultReducer(state: AppState, action: Action) {
-    switch (action.type) {
-        case "increment counter":
-            return {...state, count: state.count + 1};
-        default:
-            return state
-    }
-}
-
 function App(props: AppProps) {
     const initialState = props.initialState ?? defaultState
-    const reducer = props.reducer ?? defaultReducer
+    const reducer = props.reducer ?? appReducer
     const [state, dispatch] = useReducer(reducer, initialState)
 
     return (
