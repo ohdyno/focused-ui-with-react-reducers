@@ -15,7 +15,7 @@ function App(props: AppProps) {
     return (
         <>
             <div className="card">
-                <button onClick={() => dispatch({type: 'increment counter'})}>
+                <button onClick={() => dispatch({type: 'increment', dispatch})}>
                     count is {state.count}
                 </button>
             </div>

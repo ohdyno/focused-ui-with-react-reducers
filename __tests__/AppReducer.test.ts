@@ -35,30 +35,50 @@ describe(`App Reducer`, () => {
         requests.length = 0
     })
 
-    it('should call the count client when it receives the "increment count" action', async () => {
-        const incrementAction: Action = {type: 'increment', dispatch: vi.fn()};
+    describe('when it receives the "increment" action', () => {
         const initialState: AppState = {count: 0};
-        appReducer(initialState, incrementAction)
+        const action: Action = {type: 'increment', dispatch: vi.fn()};
 
-        await waitForRequests(requests)
+        beforeEach(() => {
+            vi.clearAllMocks()
+        })
 
-        const request = requests[0];
-        expect(request.url.toString()).toEqual(`https://example.com/api/increment/${initialState.count}`)
+        it('should call the count client when it receives the "increment" action', async () => {
+            appReducer(initialState, action)
+
+            await waitForRequests(requests)
+
+            expect(requests[0].url.toString()).toEqual(`https://example.com/api/increment/${initialState.count}`)
+        });
+
+        it('should dispatch "increment success" when the count client returns 200', async () => {
+            appReducer(initialState, action)
+
+            await waitFor(async () => expect(action.dispatch).toHaveBeenCalledTimes(1))
+            expect(action.dispatch).toHaveBeenLastCalledWith({type: 'increment success', count: initialState.count})
+        });
+
+        it('should not increment the count if the count client does not return 200', async () => {
+            const non200Response = (req, res, ctx) => res(ctx.status(500));
+            server.use(
+                rest.all(/.*/, non200Response)
+            )
+
+            appReducer(initialState, action)
+
+            await waitFor(async () => expect(action.dispatch).toHaveBeenCalledTimes(1))
+            expect(action.dispatch).toHaveBeenLastCalledWith({type: 'increment failure'})
+        });
     });
 
-    it('should not increment the count if the count client does not return 200', async () => {
-        const non200Response = (req, res, ctx) => res(ctx.status(500));
-        server.use(
-            rest.all(/.*/, non200Response)
-        )
+    describe('when it receives the "increment success" action', () => {
+        it('increments the count', async () => {
+            const initialState: AppState = {count: 0};
+            const action: Action = {type: 'increment success', count: initialState.count};
 
-        const dispatchSpy = vi.fn();
-        const incrementAction: Action = {type: 'increment', dispatch: dispatchSpy};
-        const initialState: AppState = {count: 0};
-        appReducer(initialState, incrementAction)
+            const newState = appReducer(initialState, action);
 
-        await waitFor(async () => expect(dispatchSpy).toHaveBeenCalledTimes(1))
-
-        expect(dispatchSpy).toHaveBeenLastCalledWith({type: 'increment failure'})
+            expect(newState.count).toEqual(initialState.count + 1)
+        });
     });
 })
