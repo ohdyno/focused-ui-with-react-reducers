@@ -80,5 +80,23 @@ describe(`App Reducer`, () => {
 
             expect(newState.count).toEqual(initialState.count + 1)
         });
+
+        it('increments the count from the "action.count"', async () => {
+            const initialState: AppState = {count: 0};
+            const action: Action = {type: 'increment success', count: 5};
+
+            const newState = appReducer(initialState, action);
+
+            expect(newState.count).toEqual(action.count + 1)
+        });
+
+        it('ignores the action if the "state.count" has already incremented past "action.count"', async () => {
+            const action: Action = {type: 'increment success', count: 5};
+            const initialState: AppState = {count: action.count + 2};
+
+            const newState = appReducer(initialState, action);
+
+            expect(newState.count).toEqual(initialState.count)
+        });
     });
 })
