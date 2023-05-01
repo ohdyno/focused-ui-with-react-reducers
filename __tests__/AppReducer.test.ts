@@ -1,37 +1,18 @@
-import {setupServer} from 'msw/node'
 import {Action, appReducer, AppState} from "../src/AppReducer";
 import {MockedRequest, rest} from "msw";
 import {waitFor} from "@testing-library/react";
-import {vi} from "vitest";
-
-const resolver = (req, res, ctx) => {
-    return res(ctx.status(200))
-};
-
-const handlers = [
-    rest.all(/.*/, resolver)
-];
-const server = setupServer(...handlers)
-
-function waitForRequests(requests: MockedRequest[], numberOfRequests = 1) {
-    return waitFor(() => expect(requests.length).toBeGreaterThan(numberOfRequests - 1));
-}
+import {afterEach, beforeAll, beforeEach, describe, expect, it, vi} from "vitest";
+import {server} from "./setupMSW";
 
 describe(`App Reducer`, () => {
     const requests: MockedRequest[] = []
     beforeAll(() => {
-        server.listen()
         server.events.on('request:start', (req) => {
             requests.push(req)
         })
     })
 
-    afterAll(() => {
-        server.close()
-    })
-
     afterEach(() => {
-        server.resetHandlers()
         requests.length = 0
     })
 
@@ -46,7 +27,7 @@ describe(`App Reducer`, () => {
         it('should call the count client when it receives the "increment" action', async () => {
             appReducer(initialState, action)
 
-            await waitForRequests(requests)
+            await waitFor(() => expect(requests.length).toBeGreaterThan(0))
 
             expect(requests[0].url.toString()).toEqual(`https://example.com/api/increment/${initialState.count}`)
         });

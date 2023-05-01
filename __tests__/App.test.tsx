@@ -2,31 +2,9 @@ import {render, screen, waitFor} from '@testing-library/react';
 import App from '../src/App';
 import {vi} from "vitest";
 import userEvent from "@testing-library/user-event";
-import {rest} from "msw";
-import {setupServer} from "msw/node";
-
-const resolver = (req, res, ctx) => {
-    return res(ctx.status(200))
-};
-
-const handlers = [
-    rest.all(/.*/, resolver)
-];
-const server = setupServer(...handlers)
+import { describe, it, expect } from 'vitest'
 
 describe('App', () => {
-    beforeAll(() => {
-        server.listen()
-    })
-
-    afterAll(() => {
-        server.close()
-    })
-
-    afterEach(() => {
-        server.resetHandlers()
-    })
-
     describe('renders from initialState', () => {
         it('count 0', () => {
             render(<App initialState={{count: 0}}/>);
