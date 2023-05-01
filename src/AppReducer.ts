@@ -28,7 +28,7 @@ export function appReducer(state: AppState, action: Action): AppState {
                 })
             return state
         case "increment success":
-            return {...state, count: action.count + 1}
+            return {...state, count: action.count + 1} // TODO There's a race condition bug here (what if inc(0) completes after inc(1))?
         default:
             return state
     }
