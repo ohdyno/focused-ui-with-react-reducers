@@ -1,18 +1,46 @@
 import {Dispatch, Reducer} from "react";
 
-type Dispatchable = {
-    dispatch: Dispatch<Action>
+// Actions
+export const Actions = {
+    increment(dispatch: Dispatch<Action>): IncrementAction {
+        return {
+            type: "increment",
+            dispatch
+        }
+    },
+
+    incrementSuccess(count: number): IncrementSuccess {
+        return {
+            type: "increment success",
+            count
+        }
+    },
+
+    incrementFailure(): IncrementFailure {
+        return {
+            type: "increment failure"
+        }
+    }
 }
 
-export type Action =
-    | { type: 'increment' } & Dispatchable
-    | { type: "increment failure" }
-    | { type: "increment success", count: number }
+type Dispatchable = { dispatch: Dispatch<Action> }
+type IncrementAction = { type: 'increment' } & Dispatchable
+type IncrementFailure = { type: "increment failure" };
+type IncrementSuccess = { type: "increment success", count: number };
 
+export type Action =
+    | IncrementAction
+    | IncrementFailure
+    | IncrementSuccess
+
+// State
 export type AppState = {
     count: number
 }
 
+export const defaultState: AppState = {count: 0};
+
+// Reducer
 export type AppReducer = Reducer<AppState, Action>
 
 export function appReducer(state: AppState, action: Action): AppState {
@@ -21,9 +49,9 @@ export function appReducer(state: AppState, action: Action): AppState {
             fetch(`https://example.com/api/increment/${state.count}`)
                 .then((response) => {
                     if (response.ok) {
-                        action.dispatch({type: "increment success", count: state.count});
+                        action.dispatch(Actions.incrementSuccess(state.count));
                     } else {
-                        action.dispatch({type: "increment failure"});
+                        action.dispatch(Actions.incrementFailure());
                     }
                 })
             return state
@@ -36,5 +64,3 @@ export function appReducer(state: AppState, action: Action): AppState {
             return state
     }
 }
-
-export const defaultState: AppState = {count: 0};

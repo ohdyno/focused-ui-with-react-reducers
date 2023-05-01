@@ -1,6 +1,6 @@
 import {PropsWithChildren, useReducer} from 'react'
 import './App.css'
-import {AppReducer, appReducer, AppState, defaultState} from "./AppReducer.ts";
+import {Actions, AppReducer, appReducer, AppState, defaultState} from "./AppReducer.ts";
 
 type AppProps = PropsWithChildren<{
     initialState?: AppState,
@@ -15,7 +15,7 @@ function App(props: AppProps) {
     return (
         <>
             <div className="card">
-                <button onClick={() => dispatch({type: 'increment', dispatch})}>
+                <button onClick={() => dispatch(Actions.increment(dispatch))}>
                     count is {state.count}
                 </button>
             </div>

@@ -1,13 +1,14 @@
 import {render, screen, waitFor} from '@testing-library/react';
-import App from '../src/App';
 import {vi} from "vitest";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect } from 'vitest'
+import {Actions, defaultState} from "../src/AppReducer";
+import App from '../src/App';
 
 describe('App', () => {
     describe('renders from initialState', () => {
         it('count 0', () => {
-            render(<App initialState={{count: 0}}/>);
+            render(<App initialState={defaultState}/>);
             expect(screen.getByText('count is 0')).toBeInTheDocument()
         });
 
@@ -31,7 +32,7 @@ describe('App', () => {
 
             await user.click(screen.getByRole('button'))
 
-            expect(reducer).toHaveBeenCalledWith(expect.anything(), {type: 'increment', dispatch: expect.anything()})
+            expect(reducer).toHaveBeenCalledWith(expect.anything(), Actions.increment(expect.anything()))
             expect(reducer).toHaveBeenCalledTimes(1)
         });
 
