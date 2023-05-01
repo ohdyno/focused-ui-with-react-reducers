@@ -1,28 +1,13 @@
 import {Action, appReducer, AppState} from "../src/AppReducer";
-import {MockedRequest, rest} from "msw";
+import {rest} from "msw";
 import {waitFor} from "@testing-library/react";
-import {afterEach, beforeAll, beforeEach, describe, expect, it, vi} from "vitest";
-import {server} from "./setupMSW";
+import {describe, expect, it, vi} from "vitest";
+import {requests, server} from "./setupMSW";
 
 describe(`App Reducer`, () => {
-    const requests: MockedRequest[] = []
-    beforeAll(() => {
-        server.events.on('request:start', (req) => {
-            requests.push(req)
-        })
-    })
-
-    afterEach(() => {
-        requests.length = 0
-    })
-
     describe('when it receives the "increment" action', () => {
         const initialState: AppState = {count: 0};
         const action: Action = {type: 'increment', dispatch: vi.fn()};
-
-        beforeEach(() => {
-            vi.clearAllMocks()
-        })
 
         it('should call the count client when it receives the "increment" action', async () => {
             appReducer(initialState, action)
