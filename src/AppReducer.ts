@@ -1,7 +1,13 @@
-import {Reducer} from "react";
+import {Dispatch, Reducer} from "react";
+
+type Dispatchable = {
+    dispatch: Dispatch<Action>
+}
 
 export type Action =
-    | { type: 'increment counter' }
+    | { type: 'increment' } & Dispatchable
+    | { type: "increment failure" }
+    | { type: "increment success" }
 
 export type AppState = {
     count: number
@@ -11,9 +17,14 @@ export type AppReducer = Reducer<AppState, Action>
 
 export function appReducer(state: AppState, action: Action) {
     switch (action.type) {
-        case "increment counter":
+        case 'increment':
             fetch(`https://example.com/api/increment/${state.count}`)
-            return {...state, count: state.count + 1};
+                .then((response) => {
+                    if (!response.ok) {
+                        action.dispatch({type: "increment failure"});
+                    }
+                })
+            return state
         default:
             return state
     }
