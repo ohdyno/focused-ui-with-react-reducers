@@ -3,16 +3,22 @@ import {Dispatch, Reducer} from "react";
 // Actions
 export const Actions = {
     increment(dispatch: Dispatch<Action>): IncrementAction {
+        fetch(`https://example.com/api/increment/`)
+            .then((response) => {
+                if (response.ok) {
+                    dispatch(Actions.incrementSuccess());
+                } else {
+                    dispatch(Actions.incrementFailure());
+                }
+            })
         return {
-            type: "increment",
-            dispatch
+            type: "increment"
         }
     },
 
-    incrementSuccess(count: number): IncrementSuccess {
+    incrementSuccess(): IncrementSuccess {
         return {
             type: "increment success",
-            count
         }
     },
 
@@ -23,10 +29,9 @@ export const Actions = {
     }
 }
 
-type Dispatchable = { dispatch: Dispatch<Action> }
-type IncrementAction = { type: 'increment' } & Dispatchable
+type IncrementAction = { type: 'increment' }
 type IncrementFailure = { type: "increment failure" };
-type IncrementSuccess = { type: "increment success", count: number };
+type IncrementSuccess = { type: "increment success" };
 
 export type Action =
     | IncrementAction
@@ -45,21 +50,8 @@ export type AppReducer = Reducer<AppState, Action>
 
 export function appReducer(state: AppState, action: Action): AppState {
     switch (action.type) {
-        case 'increment':
-            fetch(`https://example.com/api/increment/${state.count}`)
-                .then((response) => {
-                    if (response.ok) {
-                        action.dispatch(Actions.incrementSuccess(state.count));
-                    } else {
-                        action.dispatch(Actions.incrementFailure());
-                    }
-                })
-            return state
         case "increment success":
-            if (state.count <= action.count) {
-                return {...state, count: action.count + 1};
-            }
-            return state
+            return {...state, count: state.count + 1};
         default:
             return state
     }

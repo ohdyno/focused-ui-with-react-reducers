@@ -1,8 +1,7 @@
 import {render, screen, waitFor} from '@testing-library/react';
-import {vi} from "vitest";
+import {describe, expect, it, vi} from "vitest";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect } from 'vitest'
-import {Actions, defaultState} from "../src/AppReducer";
+import {defaultState} from "../src/AppReducer";
 import App from '../src/App';
 
 describe('App', () => {
@@ -24,21 +23,20 @@ describe('App', () => {
     });
 
     describe('translates user interactions to events', () => {
-        it('dispatches "increment counter" on click', async () => {
+        it('dispatches "increment" on click', async () => {
             const user = userEvent.setup()
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const reducer = vi.fn((state, _) => state);
-            render(<App reducer={reducer}/>);
+            render(<App initialState={defaultState} reducer={reducer}/>);
 
             await user.click(screen.getByRole('button'))
 
-            expect(reducer).toHaveBeenCalledWith(expect.anything(), Actions.increment(expect.anything()))
-            expect(reducer).toHaveBeenCalledTimes(1)
+            expect(reducer).toHaveBeenCalledWith(defaultState, {type: "increment"})
         });
 
         it('uses default reducer to actually increment the count', async () => {
             const user = userEvent.setup()
-            render(<App />);
+            render(<App/>);
 
             await user.click(screen.getByRole('button'))
 
