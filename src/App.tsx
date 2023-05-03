@@ -1,21 +1,32 @@
-import {PropsWithChildren, useReducer} from 'react'
+import {Dispatch, PropsWithChildren} from 'react'
 import './App.css'
-import {Actions, AppReducer, appReducer, AppState, defaultState} from "./AppReducer.ts";
+import {Action, Actions, AppReducer, appReducer, AppState, defaultState, Thunk} from "./AppReducer.ts";
+import useThunkReducer from "./hooks/useThunkReducer.ts";
+
+type TestOnlyProps = {
+    dispatch?: Dispatch<Action | Thunk>
+}
 
 type AppProps = PropsWithChildren<{
     initialState?: AppState,
-    reducer?: AppReducer
-}>
+    reducer?: AppReducer,
+}> & TestOnlyProps
+
+
 
 function App(props: AppProps) {
     const initialState = props.initialState ?? defaultState
     const reducer = props.reducer ?? appReducer
-    const [state, dispatch] = useReducer(reducer, initialState)
+    let [state, dispatch] = useThunkReducer(reducer, initialState)
+    if (props.dispatch) {
+        dispatch = props.dispatch
+        state = initialState
+    }
 
     return (
         <>
             <div className="card">
-                <button onClick={() => dispatch(Actions.increment(dispatch))}>
+                <button onClick={() => dispatch(Actions.increment())}>
                     count is {state.count}
                 </button>
             </div>

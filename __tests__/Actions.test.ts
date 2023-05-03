@@ -8,8 +8,9 @@ describe('Actions', () => {
     describe('creating the increment action', () => {
         const dispatchSpy = vi.fn();
 
-        it('should call the API', async () => {
-            Actions.increment(dispatchSpy);
+        it('should return a thunk that calls the API', async () => {
+            const thunk = Actions.increment();
+            thunk(dispatchSpy)
 
             await waitFor(() => expect(requests.length).toBeGreaterThan(0))
 
@@ -17,8 +18,11 @@ describe('Actions', () => {
         });
 
         it('should dispatch "increment success" when the count client returns 200', async () => {
-            Actions.increment(dispatchSpy);
+            const thunk = Actions.increment();
+            thunk(dispatchSpy)
+
             await waitFor(() => expect(dispatchSpy).toHaveBeenCalledTimes(1))
+
             expect(dispatchSpy).toHaveBeenLastCalledWith(Actions.incrementSuccess())
         });
 
@@ -28,7 +32,8 @@ describe('Actions', () => {
                 rest.all(/.*/, non200Response)
             )
 
-            Actions.increment(dispatchSpy);
+            const thunk = Actions.increment();
+            thunk(dispatchSpy)
 
             await waitFor(() => expect(dispatchSpy).toHaveBeenCalledTimes(1))
             expect(dispatchSpy).toHaveBeenLastCalledWith(Actions.incrementFailure())

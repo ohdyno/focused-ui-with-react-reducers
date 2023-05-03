@@ -2,17 +2,16 @@ import {Dispatch, Reducer} from "react";
 
 // Actions
 export const Actions = {
-    increment(dispatch: Dispatch<Action>): IncrementAction {
-        fetch(`https://example.com/api/increment/`)
-            .then((response) => {
-                if (response.ok) {
-                    dispatch(Actions.incrementSuccess());
-                } else {
-                    dispatch(Actions.incrementFailure());
-                }
-            })
-        return {
-            type: "increment"
+    increment(): IncrementThunk {
+        return (dispatch) => {
+            fetch(`https://example.com/api/increment/`)
+                .then((response) => {
+                    if (response.ok) {
+                        dispatch(Actions.incrementSuccess());
+                    } else {
+                        dispatch(Actions.incrementFailure());
+                    }
+                })
         }
     },
 
@@ -29,12 +28,12 @@ export const Actions = {
     }
 }
 
-type IncrementAction = { type: 'increment' }
+export type Thunk = (dispatch: Dispatch<Action>) => void;
+type IncrementThunk = Thunk
 type IncrementFailure = { type: "increment failure" };
 type IncrementSuccess = { type: "increment success" };
 
 export type Action =
-    | IncrementAction
     | IncrementFailure
     | IncrementSuccess
 
