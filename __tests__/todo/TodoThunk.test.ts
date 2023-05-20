@@ -1,10 +1,10 @@
 import {describe, expect, it, vi} from "vitest";
-import {LoadTodosThunk} from "../../src/todo/TodoThunks";
+import {LoadTodosThunk} from "../../src/todo/store/TodoThunks";
 import {server} from "../setupMSW";
 import {rest} from "msw";
 import {waitFor} from "@testing-library/react";
-import {TodoStatus} from "../../src/todo/TodoReducer";
-import {LoadTodosAction} from "../../src/todo/TodoActions";
+import {TodoStatus} from "../../src/todo/store/TodoReducer";
+import {LoadTodosAction} from "../../src/todo/store/TodoActions";
 
 describe('Todo Thunks', () => {
     describe('Load Todos', () => {

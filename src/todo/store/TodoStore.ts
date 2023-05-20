@@ -1,12 +1,10 @@
-import {createContext, Dispatch, useContext} from "react";
+import {createContext, useContext} from "react";
 import {TodoState, TodoStatus} from "./TodoReducer.ts";
 import {TodoAction} from "./TodoActions.ts";
-import {Thunk} from "./TodoThunks.ts";
+import {Store, ThunkDispatch} from "../../simple-redux/simple-redux.ts";
 
-export type TodoStore = {
-    state: TodoState,
-    dispatch: Dispatch<TodoAction | Thunk>
-}
+export type TodoStore = Store<TodoState, TodoAction>
+
 export const defaultState: TodoState = {
     todos: [
         {
@@ -22,13 +20,12 @@ export const defaultState: TodoState = {
     ]
 };
 
-export const StoreState = createContext<TodoState>(defaultState)
+export const StoreState = createContext(defaultState)
 
-export const defaultDispatch: Dispatch<TodoAction | Thunk> = () => {/* do nothing */
-};
-export const StoreDispatch = createContext<Dispatch<TodoAction | Thunk>>(defaultDispatch)
+export const defaultDispatch: ThunkDispatch<TodoAction> = () => {/* do nothing */};
+export const StoreDispatch = createContext(defaultDispatch)
 
-export function useDispatch(): Dispatch<TodoAction | Thunk> {
+export function useDispatch(): ThunkDispatch<TodoAction> {
     return useContext(StoreDispatch);
 }
 

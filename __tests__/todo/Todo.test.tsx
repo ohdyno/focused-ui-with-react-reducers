@@ -3,10 +3,10 @@ import {render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {TodoApp} from "../../src/todo/TodoApp";
-import {TodoStatus} from "../../src/todo/TodoReducer";
-import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/TodoActions";
-import {LoadTodosThunk} from "../../src/todo/TodoThunks";
-import {Store} from "../../src/todo/TodoStoreComponent";
+import {TodoStatus} from "../../src/todo/store/TodoReducer";
+import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/store/TodoActions";
+import {LoadTodosThunk} from "../../src/todo/store/TodoThunks";
+import {Store} from "../../src/todo/store/TodoStoreComponent";
 
 describe('Todo', () => {
     describe('Rendering', () => {

@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import reducer, {TodoItem, TodoState, TodoStatus} from "../../src/todo/TodoReducer";
-import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/TodoActions";
+import reducer, {TodoItem, TodoState, TodoStatus} from "../../src/todo/store/TodoReducer";
+import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/store/TodoActions";
 
 describe('Todo Reducer', () => {
     describe('Handles "new todo" action', () => {

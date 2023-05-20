@@ -1,8 +1,8 @@
 import {FormEvent, PropsWithChildren, useEffect, useState} from "react";
-import {useDispatch, useStoreState} from "./TodoStore.ts";
-import {TodoItem, TodoState, TodoStatus} from "./TodoReducer.ts";
-import {NewTodoAction, ToggleTodoStatusAction} from "./TodoActions.ts";
-import {LoadTodosThunk} from "./TodoThunks.ts";
+import {useDispatch, useStoreState} from "./store/TodoStore.ts";
+import {TodoItem, TodoState, TodoStatus} from "./store/TodoReducer.ts";
+import {NewTodoAction, ToggleTodoStatusAction} from "./store/TodoActions.ts";
+import {LoadTodosThunk} from "./store/TodoThunks.ts";
 
 function TodoList({todos}: TodoState) {
     const dispatch = useDispatch()
