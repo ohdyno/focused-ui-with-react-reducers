@@ -1,34 +1,29 @@
-import {PropsWithChildren, useReducer} from 'react'
+import {useState} from 'react'
 import './App.css'
-import {Action, Actions, AppReducer, appReducer, AppState, defaultState} from "./AppReducer.ts";
-import createThunkDispatch, {ThunkDispatch} from "./createThunkDispatch.ts";
 
-type TestOnlyProps = {
-    dispatch?: ThunkDispatch<Action>
-}
+function App() {
+    const [count, setCount] = useState(0)
+    const [callStatus, setCallStatus] = useState('')
 
-type AppProps = PropsWithChildren<{
-    initialState?: AppState,
-    reducer?: AppReducer,
-}> & TestOnlyProps
-
-
-function App(props: AppProps) {
-    const initialState = props.initialState ?? defaultState
-    const reducer = props.reducer ?? appReducer
-    const [state, dispatch] = useReducer(reducer, initialState);
-    let dispatchWithThunk = createThunkDispatch(dispatch)
-
-    if (props.dispatch) {
-        dispatchWithThunk = props.dispatch
+    function callAPI() {
+        fetch("https://example.com/")
+            .then((response) => {
+                setCallStatus(response.status.toString())
+            })
     }
 
     return (
         <>
             <div className="card">
-                <button onClick={() => dispatchWithThunk(Actions.increment())}>
-                    count is {state.count}
+                <button onClick={() => setCount((count) => count + 1)}>
+                    count is {count}
                 </button>
+            </div>
+            <div className="card">
+                <button onClick={() => callAPI()}>
+                    Call API
+                </button>
+                <p>{callStatus}</p>
             </div>
         </>
     )

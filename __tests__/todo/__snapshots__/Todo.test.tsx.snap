@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Todo > Rendering > Have Todos > renders the todo title and status 1`] = `
+<div>
+  <section>
+    <form
+      method="post"
+    >
+      <label>
+        Add New Todo:
+        <input
+          placeholder="New Todo"
+          type="text"
+          value=""
+        />
+      </label>
+    </form>
+    <section>
+      <ul>
+        <li>
+          <label>
+            mow the lawn
+            <input
+              checked=""
+              type="checkbox"
+            />
+          </label>
+        </li>
+        <li>
+          <label>
+            feed the dog
+            <input
+              type="checkbox"
+            />
+          </label>
+        </li>
+      </ul>
+    </section>
+  </section>
+</div>
+`;
+
+exports[`Todo > Rendering > No (Zero) Todos > renders "All done!" 1`] = `
+<div>
+  <section>
+    <form
+      method="post"
+    >
+      <label>
+        Add New Todo:
+        <input
+          placeholder="New Todo"
+          type="text"
+          value=""
+        />
+      </label>
+    </form>
+    <section>
+      <section
+        data-testid="todo-list"
+      >
+        <h1>
+          All Done!
+        </h1>
+      </section>
+    </section>
+  </section>
+</div>
+`;

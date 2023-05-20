@@ -1,4 +1,4 @@
-import {afterEach, beforeEach, expect, vi} from 'vitest';
+import {beforeEach, afterEach, expect, vi} from 'vitest';
 import {cleanup} from '@testing-library/react';
 import matchers from '@testing-library/jest-dom/matchers';
 
