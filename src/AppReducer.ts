@@ -1,4 +1,5 @@
-import {Dispatch, Reducer} from "react";
+import {Reducer} from "react";
+import {Thunk} from "./createThunkDispatch.ts";
 
 // Actions
 export const Actions = {
@@ -28,8 +29,7 @@ export const Actions = {
     }
 }
 
-export type Thunk = (dispatch: Dispatch<Action>) => void;
-type IncrementThunk = Thunk
+type IncrementThunk = Thunk<Action>
 type IncrementFailure = { type: "increment failure" };
 type IncrementSuccess = { type: "increment success" };
 

@@ -35,5 +35,8 @@
   },
   "msw": {
     "workerDirectory": "public"
-  }
+  },
+  "workspaces": [
+    "packages/thunk-reducer"
+  ]
 }
