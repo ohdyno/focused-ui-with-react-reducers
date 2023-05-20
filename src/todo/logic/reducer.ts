@@ -1,4 +1,4 @@
-import {TodoAction} from "./TodoActions.ts";
+import {TodoAction} from "./actions.ts";
 
 export enum TodoStatus {
     Complete = "Complete",

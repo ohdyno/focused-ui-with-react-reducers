@@ -19,8 +19,3 @@ export function createActionOrThunkDispatch<Action>(dispatch: Dispatch<Action>):
         dispatch(maybeThunk)
     }
 }
-
-export type Store<State, Action> = {
-    state: State,
-    dispatch: ThunkDispatch<Action>
-}

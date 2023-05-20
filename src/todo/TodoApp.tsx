@@ -1,11 +1,11 @@
-import {FormEvent, PropsWithChildren, useEffect, useState} from "react";
-import {useDispatch, useStoreState} from "./store/TodoStore.ts";
-import {TodoItem, TodoState, TodoStatus} from "./store/TodoReducer.ts";
-import {NewTodoAction, ToggleTodoStatusAction} from "./store/TodoActions.ts";
-import {LoadTodosThunk} from "./store/TodoThunks.ts";
+import {FormEvent, PropsWithChildren, useContext, useEffect, useState} from "react";
+import {TodoItem, TodoState, TodoStatus} from "./logic/reducer.ts";
+import {NewTodoAction, ToggleTodoStatusAction} from "./logic/actions.ts";
+import {LoadTodosThunk} from "./logic/thunks.ts";
+import {DispatchContext, StateContext} from "./logic/context.ts";
 
 function TodoList({todos}: TodoState) {
-    const dispatch = useDispatch()
+    const dispatch = useContext(DispatchContext)
 
     function handleOnChange(todo: TodoItem) {
         dispatch(ToggleTodoStatusAction(todo))
@@ -33,8 +33,8 @@ function TodoList({todos}: TodoState) {
 }
 
 export function TodoApp() {
-    const state = useStoreState()
-    const dispatch = useDispatch()
+    const state = useContext(StateContext)
+    const dispatch = useContext(DispatchContext)
 
     useEffect(() => {
         dispatch(LoadTodosThunk)
@@ -58,7 +58,7 @@ export function TodoApp() {
 }
 
 function Todo({children}: PropsWithChildren) {
-    const dispatch = useDispatch();
+    const dispatch = useContext(DispatchContext);
     const [todo, setTodo] = useState('')
 
     function handleOnSubmit(e: FormEvent<HTMLFormElement>) {

@@ -1,4 +1,4 @@
-import {TodoItem} from "./TodoReducer.ts";
+import {TodoItem} from "./reducer.ts";
 
 export type TodoAction =
     | { type: "new todo", content: string }

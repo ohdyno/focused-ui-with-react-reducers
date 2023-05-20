@@ -1,5 +1,5 @@
-import {LoadTodosAction, TodoAction} from "./TodoActions.ts";
-import {TodoItem} from "./TodoReducer.ts";
+import {LoadTodosAction, TodoAction} from "./actions.ts";
+import {TodoItem} from "./reducer.ts";
 import {Thunk as ReduxThunk} from "../../simple-redux/simple-redux.ts";
 
 type Thunk = ReduxThunk<TodoAction>

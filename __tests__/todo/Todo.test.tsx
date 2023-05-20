@@ -3,19 +3,24 @@ import {render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {TodoApp} from "../../src/todo/TodoApp";
-import {TodoStatus} from "../../src/todo/store/TodoReducer";
-import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/store/TodoActions";
-import {LoadTodosThunk} from "../../src/todo/store/TodoThunks";
-import {Store} from "../../src/todo/store/TodoStoreComponent";
+import {TodoStatus} from "../../src/todo/logic/reducer";
+import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/logic/actions";
+import {LoadTodosThunk} from "../../src/todo/logic/thunks";
+import {DispatchContext, StateContext} from "../../src/todo/logic/context";
 
 describe('Todo', () => {
     describe('Rendering', () => {
         describe('No (Zero) Todos', () => {
             it('renders "All done!"', () => {
+                const state = {todos: []};
+                const dispatch = vi.fn();
+
                 const {container} = render(
-                    <Store state={{todos: []}}>
-                        <TodoApp/>
-                    </Store>
+                    <StateContext.Provider value={state}>
+                        <DispatchContext.Provider value={dispatch}>
+                            <TodoApp/>
+                        </DispatchContext.Provider>
+                    </StateContext.Provider>
                 );
 
                 expect(container).toMatchSnapshot()
@@ -24,24 +29,28 @@ describe('Todo', () => {
 
         describe('Have Todos', () => {
             it('renders the todo title and status', () => {
+                const state = {
+                    todos: [
+                        {
+                            id: "0",
+                            title: "mow the lawn",
+                            status: TodoStatus.Complete
+                        },
+                        {
+                            id: "1",
+                            title: "feed the dog",
+                            status: TodoStatus.Incomplete
+                        }
+                    ]
+                };
+                const dispatch = vi.fn();
+
                 const {container} = render(
-                    <Store state={{
-                        todos: [
-                            {
-                                id: "0",
-                                title: "mow the lawn",
-                                status: TodoStatus.Complete
-                            },
-                            {
-                                id: "1",
-                                title: "feed the dog",
-                                status: TodoStatus.Incomplete
-                            }
-                        ]
-                    }
-                    }>
-                        <TodoApp/>
-                    </Store>
+                    <StateContext.Provider value={state}>
+                        <DispatchContext.Provider value={dispatch}>
+                            <TodoApp/>
+                        </DispatchContext.Provider>
+                    </StateContext.Provider>
                 );
 
                 expect(container).toMatchSnapshot()
@@ -53,11 +62,15 @@ describe('Todo', () => {
         describe('Adding a new todo', () => {
             it('dispatches a "new todo" action', async () => {
                 const user = userEvent.setup()
-                const dispatch = vi.fn()
+                const state = {todos: []};
+                const dispatch = vi.fn();
+
                 render(
-                    <Store dispatch={dispatch}>
-                        <TodoApp/>
-                    </Store>
+                    <StateContext.Provider value={state}>
+                        <DispatchContext.Provider value={dispatch}>
+                            <TodoApp/>
+                        </DispatchContext.Provider>
+                    </StateContext.Provider>
                 );
 
                 const input = screen.getByLabelText(/add new todo/i);
@@ -68,37 +81,42 @@ describe('Todo', () => {
 
             it('allows inputting multiple todos without deleting previous ', async () => {
                 const user = userEvent.setup()
-                const dispatch = vi.fn()
+                const state = {todos: []};
+                const dispatch = vi.fn();
+
                 render(
-                    <Store dispatch={dispatch}>
-                        <TodoApp/>
-                    </Store>
+                    <StateContext.Provider value={state}>
+                        <DispatchContext.Provider value={dispatch}>
+                            <TodoApp/>
+                        </DispatchContext.Provider>
+                    </StateContext.Provider>
                 );
 
                 const input = screen.getByLabelText(/add new todo/i);
                 await user.type(input, "cook food{enter}")
-                expect(dispatch).toHaveBeenCalledWith(NewTodoAction("cook food"))
-
                 await user.type(input, "take out garbage{enter}")
+
+                expect(dispatch).toHaveBeenCalledWith(NewTodoAction("cook food"))
                 expect(dispatch).toHaveBeenCalledWith(NewTodoAction("take out garbage"))
             });
         })
 
         describe('Changing todo status', () => {
-            const todo = {
-                id: "0",
-                title: "feed the dog",
-                status: TodoStatus.Incomplete
-            };
-
             it('dispatches a "toggle todo status" action when a todo status checkbox is checked/unchecked', async () => {
                 const user = userEvent.setup()
+                const todo = {
+                    id: "0",
+                    title: "feed the dog",
+                    status: TodoStatus.Incomplete
+                };
+                const state = {todos: [todo]}
                 const dispatch = vi.fn()
                 render(
-                    <Store state={{todos: [todo]}}
-                           dispatch={dispatch}>
-                        <TodoApp/>
-                    </Store>
+                    <StateContext.Provider value={state}>
+                        <DispatchContext.Provider value={dispatch}>
+                            <TodoApp/>
+                        </DispatchContext.Provider>
+                    </StateContext.Provider>
                 );
 
                 const checkBox = screen.getByLabelText(new RegExp(todo.title, "i"));
@@ -111,11 +129,14 @@ describe('Todo', () => {
 
     describe('Loading todos on initial render', () => {
         it('dispatches the "load todos" thunk', () => {
+            const state = {todos: []}
             const dispatch = vi.fn()
             render(
-                <Store dispatch={dispatch}>
-                    <TodoApp/>
-                </Store>
+                <StateContext.Provider value={state}>
+                    <DispatchContext.Provider value={dispatch}>
+                        <TodoApp/>
+                    </DispatchContext.Provider>
+                </StateContext.Provider>
             );
             expect(dispatch).toHaveBeenCalledWith(LoadTodosThunk)
         })
