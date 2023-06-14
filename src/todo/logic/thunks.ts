@@ -1,6 +1,6 @@
 import {LoadTodosAction, TodoAction} from "./actions.ts";
 import {TodoItem, TodoState} from "./reducer.ts";
-import {Thunk as ReduxThunk} from "../../thunk-dispatch/thunk-dispatch.ts";
+import {Thunk as ReduxThunk} from "../../lib/thunk-dispatch.ts";
 
 export type Thunk = ReduxThunk<TodoState, TodoAction>
 export const LoadTodosThunk: Thunk = (dispatch) => {

@@ -1,13 +1,5 @@
 import reducer, {TodoState, TodoStatus} from "./reducer.ts";
-import {createActionOrThunkDispatch, ThunkDispatch} from "../../thunk-dispatch/thunk-dispatch.ts";
-import {TodoAction} from "./actions.ts";
-import {create} from "zustand";
-import {devtools} from "zustand/middleware";
-
-type Store = {
-    state: TodoState,
-    dispatch: ThunkDispatch<TodoState, TodoAction>
-}
+import {createStore} from "../../lib/store.ts";
 
 const defaultState: TodoState = {
     todos: [
@@ -24,15 +16,4 @@ const defaultState: TodoState = {
     ]
 };
 
-export const useStore = create<Store>()(devtools(
-        (set, get) => ({
-            state: defaultState,
-            dispatch: createActionOrThunkDispatch((action) => {
-                set((store) => ({
-                    ...store,
-                    state: reducer(store.state, action)
-                }), false, action)
-            }, () => get().state)
-        })
-    )
-)
+export const store = createStore(reducer, defaultState)
