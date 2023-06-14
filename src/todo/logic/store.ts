@@ -1,5 +1,6 @@
 import reducer, {TodoState, TodoStatus} from "./reducer.ts";
 import {createStore} from "../../lib/store.ts";
+import {useStore} from "zustand";
 
 const defaultState: TodoState = {
     todos: [
@@ -17,3 +18,11 @@ const defaultState: TodoState = {
 };
 
 export const store = createStore(reducer, defaultState)
+
+export function useStoreDispatch() {
+    return useStore(store, store => store.dispatch)
+}
+
+export function useStoreState() {
+    return useStore(store, store => store.state)
+}

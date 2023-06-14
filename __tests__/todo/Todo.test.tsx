@@ -2,11 +2,10 @@ import {describe, expect, it, vi} from "vitest";
 import {render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import {TodoApp} from "../../src/todo/TodoApp";
+import {TodoApp, StateContext, DispatchContext} from "../../src/todo/TodoApp";
 import {TodoStatus} from "../../src/todo/logic/reducer";
 import {NewTodoAction, ToggleTodoStatusAction} from "../../src/todo/logic/actions";
 import {LoadTodosThunk} from "../../src/todo/logic/thunks";
-import {DispatchContext, StateContext} from "../../src/todo/logic/context";
 
 describe('Todo', () => {
     describe('Rendering', () => {

@@ -1,11 +1,9 @@
-import {TodoApp} from "./TodoApp.tsx";
-import {DispatchContext, StateContext} from "./logic/context.ts";
-import {store} from "./logic/store.ts";
-import {useStore} from "zustand";
+import {TodoApp, StateContext, DispatchContext} from "./TodoApp.tsx";
+import {useStoreDispatch, useStoreState} from "./logic/store.ts";
 
 export function TodoAppCreator() {
-    const state = useStore(store, store => store.state)
-    const dispatch = useStore(store, store => store.dispatch)
+    const state = useStoreState()
+    const dispatch = useStoreDispatch()
 
     return (
         <StateContext.Provider value={state}>

@@ -1,8 +1,8 @@
-import {FormEvent, PropsWithChildren, useContext, useEffect, useState} from "react";
+import {createContext, FormEvent, PropsWithChildren, useContext, useEffect, useState} from "react";
 import {TodoItem, TodoState, TodoStatus} from "./logic/reducer.ts";
-import {NewTodoAction, ToggleTodoStatusAction} from "./logic/actions.ts";
+import {NewTodoAction, TodoAction, ToggleTodoStatusAction} from "./logic/actions.ts";
 import {LoadTodosThunk} from "./logic/thunks.ts";
-import {DispatchContext, StateContext} from "./logic/context.ts";
+import {ThunkDispatch} from "../lib/thunk-dispatch.ts";
 
 function TodoList({todos}: TodoState) {
     const dispatch = useContext(DispatchContext)
@@ -81,3 +81,8 @@ function Todo({children}: PropsWithChildren) {
         </section>
     )
 }
+
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+export const StateContext = createContext<TodoState>(null!)
+export const DispatchContext = createContext<ThunkDispatch<TodoState, TodoAction>>(null!)
+/* eslint-enable */
